@@ -1,35 +1,28 @@
-﻿namespace ArbolBinario.Models
+﻿namespace ArbolBinarioBlazor.Models
 {
-    internal class NodoArbol
+    public class NodoArbol
     {
-        public NodoArbol? subArbolIzquierdo { get; set; }
-        public NodoArbol? subArbolDerecho { get; set; }
-        public object? info { get; set; }
+        public NodoArbol? SubArbolIzquierdo { get; set; }
+        public NodoArbol? SubArbolDerecho { get; set; }
+        public string? Info { get; set; }
 
         public NodoArbol()
         {
-            subArbolIzquierdo = null;
-            subArbolDerecho = null;
-            info = null;
+            SubArbolIzquierdo = null;
+            SubArbolDerecho = null;
+            Info = null;
         }
 
-        public NodoArbol(object? _info)
+        public NodoArbol(string info)
         {
-            info = _info;
-            subArbolDerecho=null;
-            subArbolIzquierdo=null;
-        }
-
-        public NodoArbol(NodoArbol? _subArbolIzquierdo, NodoArbol? _subArbolDerecho, object? _info)
-        {
-            subArbolIzquierdo = _subArbolIzquierdo;
-            subArbolDerecho = _subArbolDerecho;
-            info = _info;
+            Info = info;
+            SubArbolIzquierdo = null;
+            SubArbolDerecho = null;
         }
 
         public override string ToString()
         {
-            return $"/{info}\\";
+            return $"/{Info}\\";
         }
     }
 }

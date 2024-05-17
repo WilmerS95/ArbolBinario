@@ -1,7 +1,71 @@
 ﻿@page "/"
+@using ArbolBinarioBlazor.Models
+@using ArbolBinarioBlazor.Services
+@inject ArbolBinarioService ArbolService
 
-<PageTitle>Home</PageTitle>
+<h3>Árbol Binario</h3>
 
-<h1>Hello, world!</h1>
+<input @bind="infoNodoRaiz" placeholder="Información del nodo raíz" />
+<button @onclick="CrearNodoRaiz">Crear Nodo Raíz</button>
 
-Welcome to your new app.
+@if (ArbolService.NodoRaiz != null)
+{
+    <div>
+        <input @bind="infoNodoIzquierdo" placeholder="Información del nodo izquierdo" />
+        <input @bind="infoNodoDerecho" placeholder="Información del nodo derecho" />
+        <button @onclick="AgregarNodosHijos">Agregar Nodos Hijos</button>
+    </div>
+    <div>
+        <h4>Recorrido Preorden</h4>
+        <ul>
+            @foreach (var nodo in recorridoPreorden)
+            {
+                <li>@nodo</li>
+            }
+        </ul>
+    </div>
+    <div>
+        <h4>Recorrido Inorden</h4>
+        <ul>
+            @foreach (var nodo in recorridoInorden)
+            {
+                <li>@nodo</li>
+            }
+        </ul>
+    </div>
+}
+
+@code {
+    private string infoNodoRaiz;
+    private string infoNodoIzquierdo;
+    private string infoNodoDerecho;
+    private List<string> recorridoPreorden = new();
+    private List<string> recorridoInorden = new();
+
+    private void CrearNodoRaiz()
+    {
+        var nodoRaiz = ArbolService.CrearNodo(infoNodoRaiz);
+        ArbolService.NodoRaiz = nodoRaiz;
+        ActualizarRecorridos();
+    }
+
+    private void AgregarNodosHijos()
+    {
+        if (ArbolService.NodoRaiz != null)
+        {
+            ArbolService.PoblarArbol(ArbolService.NodoRaiz, infoNodoIzquierdo, infoNodoDerecho);
+            ActualizarRecorridos();
+        }
+    }
+
+    private void ActualizarRecorridos()
+    {
+        recorridoPreorden.Clear();
+        recorridoInorden.Clear();
+        if (ArbolService.NodoRaiz != null)
+        {
+            ArbolService.RecorridoPreorden(ArbolService.NodoRaiz, recorridoPreorden);
+            ArbolService.RecorridoInorden(ArbolService.NodoRaiz, recorridoInorden);
+        }
+    }
+}
