@@ -36,7 +36,7 @@
 }
 
 @code {
-    private string infoNodoRaiz;
+    private string? infoNodoRaiz;
     private string infoNodoIzquierdo;
     private string infoNodoDerecho;
     private List<string> recorridoPreorden = new();
@@ -64,8 +64,8 @@
         recorridoInorden.Clear();
         if (ArbolService.NodoRaiz != null)
         {
-            ArbolService.RecorridoPreorden(ArbolService.NodoRaiz, recorridoPreorden);
-            ArbolService.RecorridoInorden(ArbolService.NodoRaiz, recorridoInorden);
+            // ArbolService.RecorridoPreorden(ArbolService.NodoRaiz, recorridoPreorden);
+            // ArbolService.RecorridoInorden(ArbolService.NodoRaiz, recorridoInorden);
         }
     }
 }
