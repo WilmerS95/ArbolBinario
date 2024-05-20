@@ -138,13 +138,12 @@ namespace ArbolBinarioBlazor.Services
 
             if (info == nodo.Info)
             {
-                // Caso 1: Nodo hoja
+
                 if (nodo.SubArbolIzquierdo == null && nodo.SubArbolDerecho == null)
                 {
                     return null;
                 }
 
-                // Caso 2: Nodo con un hijo
                 if (nodo.SubArbolIzquierdo == null)
                 {
                     return nodo.SubArbolDerecho;
@@ -155,7 +154,6 @@ namespace ArbolBinarioBlazor.Services
                     return nodo.SubArbolIzquierdo;
                 }
 
-                // Caso 3: Nodo con dos hijos
                 NodoArbol sucesor = ObtenerMinimo(nodo.SubArbolDerecho);
                 nodo.Info = sucesor.Info;
                 nodo.SubArbolDerecho = EliminarNodoRecursivo(nodo.SubArbolDerecho, sucesor.Info);
