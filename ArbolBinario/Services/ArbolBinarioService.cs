@@ -5,8 +5,8 @@ namespace ArbolBinarioBlazor.Services
     internal class ArbolBinarioService
     {
         public NodoArbol? NodoRaiz { get; set; }
-        public int TotalNodos { get; set; } //
-        public string Respuesta = string.Empty;//
+        //public int TotalNodos { get; set; } //
+        public string Respuesta { get; set; } = string.Empty;//
 
         public ArbolBinarioService()
         {
@@ -14,7 +14,7 @@ namespace ArbolBinarioBlazor.Services
             //TotalNodos = 0;
         }
 
-        bool EstaVacio()
+        public bool EstaVacio()
         {
             return NodoRaiz == null;
         }
@@ -86,23 +86,91 @@ namespace ArbolBinarioBlazor.Services
 
         //}
 
-        public void PoblarArbol(NodoArbol nodo, string infoIzquierdo, string infoDerecho)
+        public void AgregarNodo(string infoNodo, string infoNodoIzquierdo = "", string infoNodoDerecho = "")
         {
             if (EstaVacio())
             {
-                NodoRaiz = nodo;
+                NodoRaiz = CrearNodo(infoNodo);
             }
-
-            if (!string.IsNullOrEmpty(infoIzquierdo))
+            else
             {
-                nodo.SubArbolIzquierdo = CrearNodo(infoIzquierdo);
-            }
-
-            if (!string.IsNullOrEmpty(infoDerecho))
-            {
-                nodo.SubArbolDerecho = CrearNodo(infoDerecho);
+                NodoArbol nodo = BuscarNodo(NodoRaiz, infoNodo);
+                if (nodo != null)
+                {
+                    if (!string.IsNullOrEmpty(infoNodoIzquierdo))
+                    {
+                        nodo.SubArbolIzquierdo = CrearNodo(infoNodoIzquierdo);
+                    }
+                    if (!string.IsNullOrEmpty(infoNodoDerecho))
+                    {
+                        nodo.SubArbolDerecho = CrearNodo(infoNodoDerecho);
+                    }
+                }
             }
         }
+
+        private NodoArbol? BuscarNodo(NodoArbol? nodoActual, string infoNodo)
+        {
+            if (nodoActual == null) return null;
+
+            if (nodoActual.Info == infoNodo)
+            {
+                return nodoActual;
+            }
+
+            NodoArbol? nodoEncontrado = BuscarNodo(nodoActual.SubArbolIzquierdo, infoNodo);
+            if (nodoEncontrado == null)
+            {
+                nodoEncontrado = BuscarNodo(nodoActual.SubArbolDerecho, infoNodo);
+            }
+
+            return nodoEncontrado;
+        }
+
+        //private bool AgregarNodoRecursivo(NodoArbol nodoActual, string infoPadre, string infoNodo, bool esIzquierdo)
+        //{
+        //    if (nodoActual == null) return false;
+
+        //    if (nodoActual.Info == infoPadre)
+        //    {
+        //        if (esIzquierdo)
+        //        {
+        //            if (nodoActual.SubArbolIzquierdo == null)
+        //                nodoActual.SubArbolIzquierdo = CrearNodo(infoNodo);
+        //            else
+        //                return false; // Nodo izquierdo ya existe
+        //        }
+        //        else
+        //        {
+        //            if (nodoActual.SubArbolDerecho == null)
+        //                nodoActual.SubArbolDerecho = CrearNodo(infoNodo);
+        //            else
+        //                return false; // Nodo derecho ya existe
+        //        }
+        //        return true;
+        //    }
+
+        //    return AgregarNodoRecursivo(nodoActual.SubArbolIzquierdo, infoPadre, infoNodo, esIzquierdo) ||
+        //           AgregarNodoRecursivo(nodoActual.SubArbolDerecho, infoPadre, infoNodo, esIzquierdo);
+        //}
+
+        //public void PoblarArbol(NodoArbol nodo, string infoIzquierdo, string infoDerecho)
+        //{
+        //    if (EstaVacio())
+        //    {
+        //        NodoRaiz = nodo;
+        //    }
+
+        //    if (!string.IsNullOrEmpty(infoIzquierdo))
+        //    {
+        //        nodo.SubArbolIzquierdo = CrearNodo(infoIzquierdo);
+        //    }
+
+        //    if (!string.IsNullOrEmpty(infoDerecho))
+        //    {
+        //        nodo.SubArbolDerecho = CrearNodo(infoDerecho);
+        //    }
+        //}
 
         //public void RecorridoPreorden(NodoArbol nodo, List<string> recorrido)
         //{
@@ -127,5 +195,224 @@ namespace ArbolBinarioBlazor.Services
         //    recorrido.Add(nodo.Info);
         //    RecorridoInorden(nodo.SubArbolDerecho, recorrido);
         //}
+
+        public void RecorridoPreorden(NodoArbol nodo, List<string> recorrido)
+        {
+            if (nodo == null) return;
+
+            recorrido.Add(nodo.Info);
+            RecorridoPreorden(nodo.SubArbolIzquierdo, recorrido);
+            RecorridoPreorden(nodo.SubArbolDerecho, recorrido);
+        }
+
+        public void RecorridoInorden(NodoArbol nodo, List<string> recorrido)
+        {
+            if (nodo == null) return;
+
+            RecorridoInorden(nodo.SubArbolIzquierdo, recorrido);
+            recorrido.Add(nodo.Info);
+            RecorridoInorden(nodo.SubArbolDerecho, recorrido);
+        }
+
+        public void RecorridoPostorden(NodoArbol nodo, List<string> recorrido)
+        {
+            if (nodo == null) return;
+
+            RecorridoPostorden(nodo.SubArbolIzquierdo, recorrido);
+            RecorridoPostorden(nodo.SubArbolDerecho, recorrido);
+            recorrido.Add(nodo.Info);
+        }
+
+        //public void RecorridoPreordenIterativo(NodoArbol nodo, List<string> recorrido)
+        //{
+        //    if (nodo == null) return;
+
+        //    Stack<NodoArbol> pila = new Stack<NodoArbol>();
+        //    pila.Push(nodo);
+
+        //    while (pila.Count > 0)
+        //    {
+        //        NodoArbol actual = pila.Pop();
+        //        recorrido.Add(actual.Info);
+
+        //        if (actual.SubArbolDerecho != null)
+        //        {
+        //            pila.Push(actual.SubArbolDerecho);
+        //        }
+
+        //        if (actual.SubArbolIzquierdo != null)
+        //        {
+        //            pila.Push(actual.SubArbolIzquierdo);
+        //        }
+        //    }
+        //}
+
+        //public void RecorridoInordenIterativo(NodoArbol nodo, List<string> recorrido)
+        //{
+        //    if (nodo == null) return;
+
+        //    Stack<NodoArbol> pila = new Stack<NodoArbol>();
+        //    NodoArbol? actual = nodo;
+
+        //    while (actual != null || pila.Count > 0)
+        //    {
+        //        while (actual != null)
+        //        {
+        //            pila.Push(actual);
+        //            actual = actual.SubArbolIzquierdo;
+        //        }
+
+        //        actual = pila.Pop();
+        //        recorrido.Add(actual.Info);
+        //        actual = actual.SubArbolDerecho;
+        //    }
+        //}
+
+        //public void RecorridoPostordenIterativo(NodoArbol nodo, List<string> recorrido)
+        //{
+        //    if (nodo == null) return;
+
+        //    Stack<NodoArbol> pila1 = new Stack<NodoArbol>();
+        //    Stack<NodoArbol> pila2 = new Stack<NodoArbol>();
+
+        //    pila1.Push(nodo);
+
+        //    while (pila1.Count > 0)
+        //    {
+        //        NodoArbol actual = pila1.Pop();
+        //        pila2.Push(actual);
+
+        //        if (actual.SubArbolIzquierdo != null)
+        //        {
+        //            pila1.Push(actual.SubArbolIzquierdo);
+        //        }
+
+        //        if (actual.SubArbolDerecho != null)
+        //        {
+        //            pila1.Push(actual.SubArbolDerecho);
+        //        }
+        //    }
+
+        //    while (pila2.Count > 0)
+        //    {
+        //        recorrido.Add(pila2.Pop().Info);
+        //    }
+        //}
+
+        public void RecorridoInordenIterativo(NodoArbol nodo, List<string> recorrido)
+        {
+            NodoArbol? actual = nodo;
+
+            while (actual != null)
+            {
+                if (actual.SubArbolIzquierdo == null)
+                {
+                    recorrido.Add(actual.Info);
+                    actual = actual.SubArbolDerecho;
+                }
+                else
+                {
+                    NodoArbol predecesor = actual.SubArbolIzquierdo;
+                    while (predecesor.SubArbolDerecho != null && predecesor.SubArbolDerecho != actual)
+                    {
+                        predecesor = predecesor.SubArbolDerecho;
+                    }
+
+                    if (predecesor.SubArbolDerecho == null)
+                    {
+                        predecesor.SubArbolDerecho = actual;
+                        actual = actual.SubArbolIzquierdo;
+                    }
+                    else
+                    {
+                        predecesor.SubArbolDerecho = null;
+                        recorrido.Add(actual.Info);
+                        actual = actual.SubArbolDerecho;
+                    }
+                }
+            }
+        }
+
+        public void RecorridoPreordenIterativo(NodoArbol nodo, List<string> recorrido)
+        {
+            NodoArbol? actual = nodo;
+
+            while (actual != null)
+            {
+                if (actual.SubArbolIzquierdo == null)
+                {
+                    recorrido.Add(actual.Info);
+                    actual = actual.SubArbolDerecho;
+                }
+                else
+                {
+                    NodoArbol predecesor = actual.SubArbolIzquierdo;
+                    while (predecesor.SubArbolDerecho != null && predecesor.SubArbolDerecho != actual)
+                    {
+                        predecesor = predecesor.SubArbolDerecho;
+                    }
+
+                    if (predecesor.SubArbolDerecho == null)
+                    {
+                        predecesor.SubArbolDerecho = actual;
+                        recorrido.Add(actual.Info);
+                        actual = actual.SubArbolIzquierdo;
+                    }
+                    else
+                    {
+                        predecesor.SubArbolDerecho = null;
+                        actual = actual.SubArbolDerecho;
+                    }
+                }
+            }
+        }
+
+        public void RecorridoPostordenIterativo(NodoArbol nodo, List<string> recorrido)
+        {
+            NodoArbol nodoTemporal = new NodoArbol { SubArbolIzquierdo = nodo };
+            NodoArbol? actual = nodoTemporal;
+
+            while (actual != null)
+            {
+                if (actual.SubArbolIzquierdo == null)
+                {
+                    actual = actual.SubArbolDerecho;
+                }
+                else
+                {
+                    NodoArbol predecesor = actual.SubArbolIzquierdo;
+                    while (predecesor.SubArbolDerecho != null && predecesor.SubArbolDerecho != actual)
+                    {
+                        predecesor = predecesor.SubArbolDerecho;
+                    }
+
+                    if (predecesor.SubArbolDerecho == null)
+                    {
+                        predecesor.SubArbolDerecho = actual;
+                        actual = actual.SubArbolIzquierdo;
+                    }
+                    else
+                    {
+                        AddNodesReverse(actual.SubArbolIzquierdo, predecesor, recorrido);
+                        predecesor.SubArbolDerecho = null;
+                        actual = actual.SubArbolDerecho;
+                    }
+                }
+            }
+        }
+
+        private void AddNodesReverse(NodoArbol from, NodoArbol to, List<string> recorrido)
+        {
+            List<string> temp = new List<string>();
+            NodoArbol? current = from;
+            while (current != to)
+            {
+                temp.Add(current.Info);
+                current = current.SubArbolDerecho;
+            }
+            temp.Add(to.Info);
+            temp.Reverse();
+            recorrido.AddRange(temp);
+        }
     }
 }

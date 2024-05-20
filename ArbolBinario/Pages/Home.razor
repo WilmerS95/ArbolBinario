@@ -5,67 +5,96 @@
 
 <h3>Árbol Binario</h3>
 
-<input @bind="infoNodoRaiz" placeholder="Información del nodo raíz" />
-<button @onclick="CrearNodoRaiz">Crear Nodo Raíz</button>
+<div class="container">
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <div class="input-group">
+                <input type="text" class="form-control" @bind="infoNodoRaiz" placeholder="Nodo Raíz" aria-label="Nodo Raíz" aria-describedby="button-addon2">
+                <button class="btn btn-outline-primary" type="button" id="button-addon2" @onclick="CrearNodoRaiz">Crear Nodo Raíz</button>
+            </div>
+        </div>
+    </div>
 
-@if (ArbolService.NodoRaiz != null)
-{
-    <div>
-        <input @bind="infoNodoIzquierdo" placeholder="Información del nodo izquierdo" />
-        <input @bind="infoNodoDerecho" placeholder="Información del nodo derecho" />
-        <button @onclick="AgregarNodosHijos">Agregar Nodos Hijos</button>
-    </div>
-    <div>
-        <h4>Recorrido Preorden</h4>
-        <ul>
-            @foreach (var nodo in recorridoPreorden)
-            {
-                <li>@nodo</li>
-            }
-        </ul>
-    </div>
-    <div>
-        <h4>Recorrido Inorden</h4>
-        <ul>
-            @foreach (var nodo in recorridoInorden)
-            {
-                <li>@nodo</li>
-            }
-        </ul>
-    </div>
-}
+    @if (ArbolService.NodoRaiz != null)
+    {
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <input type="text" class="form-control" @bind="infoNodoPadre" placeholder="Nodo Padre" aria-label="Nodo Padre">
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" @bind="infoNodoIzquierdo" placeholder="Nodo Izquierdo" aria-label="Nodo Izquierdo">
+            </div>
+            <div class="col-md-3">
+                <input type="text" class="form-control" @bind="infoNodoDerecho" placeholder="Nodo Derecho" aria-label="Nodo Derecho">
+            </div>
+            <div class="col-md-12 mt-2">
+                <button class="btn btn-outline-primary" type="button" @onclick="AgregarNodosHijos">Agregar Nodos Hijos</button>
+            </div>
+        </div>
+        <div>
+            <h4>Recorrido Preorden</h4>
+            <ul>
+                @foreach (var nodo in recorridoPreorden)
+                {
+                    <li>@nodo</li>
+                }
+            </ul>
+        </div>
+        <div>
+            <h4>Recorrido Inorden</h4>
+            <ul>
+                @foreach (var nodo in recorridoInorden)
+                {
+                    <li>@nodo</li>
+                }
+            </ul>
+        </div>
+        <div>
+            <h4>Recorrido Postorden</h4>
+            <ul>
+                @foreach (var nodo in recorridoPostorden)
+                {
+                    <li>@nodo</li>
+                }
+            </ul>
+        </div>
+    }
+</div>
 
 @code {
     private string? infoNodoRaiz;
+    private string infoNodoPadre;
     private string infoNodoIzquierdo;
     private string infoNodoDerecho;
     private List<string> recorridoPreorden = new();
     private List<string> recorridoInorden = new();
+    private List<string> recorridoPostorden = new();
 
     private void CrearNodoRaiz()
     {
-        var nodoRaiz = ArbolService.CrearNodo(infoNodoRaiz);
-        ArbolService.NodoRaiz = nodoRaiz;
+        if (ArbolService.EstaVacio())
+        {
+            ArbolService.NodoRaiz = ArbolService.CrearNodo(infoNodoRaiz);
+        }
         ActualizarRecorridos();
     }
 
     private void AgregarNodosHijos()
     {
-        if (ArbolService.NodoRaiz != null)
-        {
-            ArbolService.PoblarArbol(ArbolService.NodoRaiz, infoNodoIzquierdo, infoNodoDerecho);
-            ActualizarRecorridos();
-        }
+        ArbolService.AgregarNodo(infoNodoPadre, infoNodoIzquierdo, infoNodoDerecho);
+        ActualizarRecorridos();
     }
 
     private void ActualizarRecorridos()
     {
         recorridoPreorden.Clear();
         recorridoInorden.Clear();
+        recorridoPostorden.Clear();
         if (ArbolService.NodoRaiz != null)
         {
-            // ArbolService.RecorridoPreorden(ArbolService.NodoRaiz, recorridoPreorden);
-            // ArbolService.RecorridoInorden(ArbolService.NodoRaiz, recorridoInorden);
+            ArbolService.RecorridoPreordenIterativo(ArbolService.NodoRaiz, recorridoPreorden);
+            ArbolService.RecorridoInordenIterativo(ArbolService.NodoRaiz, recorridoInorden);
+            ArbolService.RecorridoPostordenIterativo(ArbolService.NodoRaiz, recorridoPostorden);
         }
     }
 }
