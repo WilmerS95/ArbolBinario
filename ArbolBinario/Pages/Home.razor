@@ -49,8 +49,14 @@
                 <h4>Nodo Derecho</h4>
                 <input type="text" class="form-control" @bind="infoNodoDerecho" placeholder="Nodo Derecho" aria-label="Nodo Derecho">
             </div>
+            <div class="col-md-3">
+                <h4>Nodo a Eliminar</h4>
+                <input type="text" class="form-control" @bind="infoNodoEliminar" placeholder="Nodo a Eliminar" aria-label="Nodo a Eliminar">
+            </div>
             <div class="col-md-12 mt-2">
                 <button class="btn btn-outline-dark" type="button" @onclick="AgregarNodosHijos">Agregar Nodos Hijos</button>
+
+                <button class="btn btn-outline-dark" type="button" @onclick="EliminarNodo">Eliminar Nodo</button>
 
                 <button class="btn btn-outline-dark" type="button" @onclick="ToggleMostrarListas">
                     @if (mostrarListas)
@@ -172,6 +178,7 @@
     private string infoNodoPadre;
     private string infoNodoIzquierdo;
     private string infoNodoDerecho;
+    private string infoNodoEliminar;
     private List<string> recorridoPreordenRecursivo = new();
     private List<string> recorridoInordenRecursivo = new();
     private List<string> recorridoPostordenRecursivo = new();
@@ -192,6 +199,12 @@
     private void AgregarNodosHijos()
     {
         ArbolService.AgregarNodo(infoNodoPadre, infoNodoIzquierdo, infoNodoDerecho);
+        ActualizarRecorridos();
+    }
+
+    private void EliminarNodo()
+    {
+        ArbolService.EliminarNodo(infoNodoEliminar);
         ActualizarRecorridos();
     }
 

@@ -127,6 +127,61 @@ namespace ArbolBinarioBlazor.Services
             return nodoEncontrado;
         }
 
+        public void EliminarNodo(string info)
+        {
+            NodoRaiz = EliminarNodoRecursivo(NodoRaiz, info);
+        }
+
+        private NodoArbol? EliminarNodoRecursivo(NodoArbol? nodo, string info)
+        {
+            if (nodo == null) return null;
+
+            if (info == nodo.Info)
+            {
+                // Caso 1: Nodo hoja
+                if (nodo.SubArbolIzquierdo == null && nodo.SubArbolDerecho == null)
+                {
+                    return null;
+                }
+
+                // Caso 2: Nodo con un hijo
+                if (nodo.SubArbolIzquierdo == null)
+                {
+                    return nodo.SubArbolDerecho;
+                }
+
+                if (nodo.SubArbolDerecho == null)
+                {
+                    return nodo.SubArbolIzquierdo;
+                }
+
+                // Caso 3: Nodo con dos hijos
+                NodoArbol sucesor = ObtenerMinimo(nodo.SubArbolDerecho);
+                nodo.Info = sucesor.Info;
+                nodo.SubArbolDerecho = EliminarNodoRecursivo(nodo.SubArbolDerecho, sucesor.Info);
+            }
+            else if (string.Compare(info, nodo.Info) < 0)
+            {
+                nodo.SubArbolIzquierdo = EliminarNodoRecursivo(nodo.SubArbolIzquierdo, info);
+            }
+            else
+            {
+                nodo.SubArbolDerecho = EliminarNodoRecursivo(nodo.SubArbolDerecho, info);
+            }
+
+            return nodo;
+        }
+
+
+        private NodoArbol ObtenerMinimo(NodoArbol nodo)
+        {
+            while (nodo.SubArbolIzquierdo != null)
+            {
+                nodo = nodo.SubArbolIzquierdo;
+            }
+            return nodo;
+        }
+
         //private bool AgregarNodoRecursivo(NodoArbol nodoActual, string infoPadre, string infoNodo, bool esIzquierdo)
         //{
         //    if (nodoActual == null) return false;
