@@ -3,60 +3,119 @@
 @using ArbolBinarioBlazor.Services
 @inject ArbolBinarioService ArbolService
 
-<h3>Árbol Binario</h3>
+
+@* <div>
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Cargando...</span>
+    </div>
+    <h1>Árbol Binario</h1>
+</div> *@
+
+<figure class="text-center">
+    <blockquote class="blockquote">
+        <p>Arbol Binario</p>
+    </blockquote>
+    <figcaption class="blockquote-footer">
+        Programación III <cite title="Source Title">Estructura de datos</cite>
+    </figcaption>
+</figure>
 
 <div class="container">
-    <div class="row mb-3">
-        <div class="col-md-4">
-            <div class="input-group">
-                <input type="text" class="form-control" @bind="infoNodoRaiz" placeholder="Nodo Raíz" aria-label="Nodo Raíz" aria-describedby="button-addon2">
-                <button class="btn btn-outline-primary" type="button" id="button-addon2" @onclick="CrearNodoRaiz">Crear Nodo Raíz</button>
+    @if (ArbolService.EstaVacio())
+    {
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <h4>Nodo Raíz</h4>
+                <div class="input-group">
+                    <input type="text" class="form-control" @bind="infoNodoRaiz" placeholder="Nodo Raíz" aria-label="Nodo Raíz" aria-describedby="button-addon2">
+                    <button class="btn btn-outline-primary" type="button" id="button-addon2" @onclick="CrearNodoRaiz">Crear Nodo Raíz</button>
+                </div>
             </div>
         </div>
-    </div>
-
+    }
+    
     @if (ArbolService.NodoRaiz != null)
     {
         <div class="row mb-3">
             <div class="col-md-3">
+                <h4>Nodo Padre</h4>
                 <input type="text" class="form-control" @bind="infoNodoPadre" placeholder="Nodo Padre" aria-label="Nodo Padre">
             </div>
             <div class="col-md-3">
+                <h4>Nodo Izquierdo</h4>
                 <input type="text" class="form-control" @bind="infoNodoIzquierdo" placeholder="Nodo Izquierdo" aria-label="Nodo Izquierdo">
             </div>
             <div class="col-md-3">
+                <h4>Nodo Derecho</h4>
                 <input type="text" class="form-control" @bind="infoNodoDerecho" placeholder="Nodo Derecho" aria-label="Nodo Derecho">
             </div>
             <div class="col-md-12 mt-2">
                 <button class="btn btn-outline-primary" type="button" @onclick="AgregarNodosHijos">Agregar Nodos Hijos</button>
             </div>
         </div>
-        <div>
-            <h4>Recorrido Preorden</h4>
-            <ul>
-                @foreach (var nodo in recorridoPreorden)
-                {
-                    <li>@nodo</li>
-                }
-            </ul>
-        </div>
-        <div>
-            <h4>Recorrido Inorden</h4>
-            <ul>
-                @foreach (var nodo in recorridoInorden)
-                {
-                    <li>@nodo</li>
-                }
-            </ul>
-        </div>
-        <div>
-            <h4>Recorrido Postorden</h4>
-            <ul>
-                @foreach (var nodo in recorridoPostorden)
-                {
-                    <li>@nodo</li>
-                }
-            </ul>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Recorridos Recursivos</h4>
+                <div>
+                    <h5>Recorrido Preorden</h5>
+                    <ul>
+                        @foreach (var nodo in recorridoPreordenRecursivo)
+                        {
+                            <li>@nodo</li>
+                        }
+                    </ul>
+                </div>
+                <div>
+                    <h5>Recorrido Inorden</h5>
+                    <ul>
+                        @foreach (var nodo in recorridoInordenRecursivo)
+                        {
+                            <li>@nodo</li>
+                        }
+                    </ul>
+                </div>
+                <div>
+                    <h5>Recorrido Postorden</h5>
+                    <ul>
+                        @foreach (var nodo in recorridoPostordenRecursivo)
+                        {
+                            <li>@nodo</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h4>Recorridos Iterativos</h4>
+                <div>
+                    <h5>Recorrido Preorden</h5>
+                    <ul>
+                        @foreach (var nodo in recorridoPreordenIterativo)
+                        {
+                            <li>@nodo</li>
+                        }
+                    </ul>
+                </div>
+                <div>
+                    <h5>Recorrido Inorden</h5>
+                    <ul>
+                        @foreach (var nodo in recorridoInordenIterativo)
+                        {
+                            <li>@nodo</li>
+                        }
+                    </ul>
+                </div>
+                <div>
+                    <h5>Recorrido Postorden</h5>
+                    <ul>
+                        @foreach (var nodo in recorridoPostordenIterativo)
+                        {
+                            <li>@nodo</li>
+                        }
+                    </ul>
+                </div>
+            </div>
         </div>
     }
 </div>
@@ -66,9 +125,12 @@
     private string infoNodoPadre;
     private string infoNodoIzquierdo;
     private string infoNodoDerecho;
-    private List<string> recorridoPreorden = new();
-    private List<string> recorridoInorden = new();
-    private List<string> recorridoPostorden = new();
+    private List<string> recorridoPreordenRecursivo = new();
+    private List<string> recorridoInordenRecursivo = new();
+    private List<string> recorridoPostordenRecursivo = new();
+    private List<string> recorridoPreordenIterativo = new();
+    private List<string> recorridoInordenIterativo = new();
+    private List<string> recorridoPostordenIterativo = new();
 
     private void CrearNodoRaiz()
     {
@@ -87,14 +149,20 @@
 
     private void ActualizarRecorridos()
     {
-        recorridoPreorden.Clear();
-        recorridoInorden.Clear();
-        recorridoPostorden.Clear();
+        recorridoPreordenRecursivo.Clear();
+        recorridoInordenRecursivo.Clear();
+        recorridoPostordenRecursivo.Clear();
+        recorridoPreordenIterativo.Clear();
+        recorridoInordenIterativo.Clear();
+        recorridoPostordenIterativo.Clear();
         if (ArbolService.NodoRaiz != null)
         {
-            ArbolService.RecorridoPreordenIterativo(ArbolService.NodoRaiz, recorridoPreorden);
-            ArbolService.RecorridoInordenIterativo(ArbolService.NodoRaiz, recorridoInorden);
-            ArbolService.RecorridoPostordenIterativo(ArbolService.NodoRaiz, recorridoPostorden);
+            ArbolService.RecorridoPreordenRecursivo(ArbolService.NodoRaiz, recorridoPreordenRecursivo);
+            ArbolService.RecorridoInordenRecursivo(ArbolService.NodoRaiz, recorridoInordenRecursivo);
+            ArbolService.RecorridoPostordenRecursivo(ArbolService.NodoRaiz, recorridoPostordenRecursivo);
+            ArbolService.RecorridoPreordenIterativo(ArbolService.NodoRaiz, recorridoPreordenIterativo);
+            ArbolService.RecorridoInordenIterativo(ArbolService.NodoRaiz, recorridoInordenIterativo);
+            ArbolService.RecorridoPostordenIterativo(ArbolService.NodoRaiz, recorridoPostordenIterativo);
         }
     }
 }

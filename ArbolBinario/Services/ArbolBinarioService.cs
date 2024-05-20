@@ -196,30 +196,30 @@ namespace ArbolBinarioBlazor.Services
         //    RecorridoInorden(nodo.SubArbolDerecho, recorrido);
         //}
 
-        public void RecorridoPreorden(NodoArbol nodo, List<string> recorrido)
+        public void RecorridoPreordenRecursivo(NodoArbol nodo, List<string> recorrido)
         {
             if (nodo == null) return;
 
             recorrido.Add(nodo.Info);
-            RecorridoPreorden(nodo.SubArbolIzquierdo, recorrido);
-            RecorridoPreorden(nodo.SubArbolDerecho, recorrido);
+            RecorridoPreordenRecursivo(nodo.SubArbolIzquierdo, recorrido);
+            RecorridoPreordenRecursivo(nodo.SubArbolDerecho, recorrido);
         }
 
-        public void RecorridoInorden(NodoArbol nodo, List<string> recorrido)
+        public void RecorridoInordenRecursivo(NodoArbol nodo, List<string> recorrido)
         {
             if (nodo == null) return;
 
-            RecorridoInorden(nodo.SubArbolIzquierdo, recorrido);
+            RecorridoInordenRecursivo(nodo.SubArbolIzquierdo, recorrido);
             recorrido.Add(nodo.Info);
-            RecorridoInorden(nodo.SubArbolDerecho, recorrido);
+            RecorridoInordenRecursivo(nodo.SubArbolDerecho, recorrido);
         }
 
-        public void RecorridoPostorden(NodoArbol nodo, List<string> recorrido)
+        public void RecorridoPostordenRecursivo(NodoArbol nodo, List<string> recorrido)
         {
             if (nodo == null) return;
 
-            RecorridoPostorden(nodo.SubArbolIzquierdo, recorrido);
-            RecorridoPostorden(nodo.SubArbolDerecho, recorrido);
+            RecorridoPostordenRecursivo(nodo.SubArbolIzquierdo, recorrido);
+            RecorridoPostordenRecursivo(nodo.SubArbolDerecho, recorrido);
             recorrido.Add(nodo.Info);
         }
 
