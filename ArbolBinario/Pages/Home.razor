@@ -16,7 +16,7 @@
         <p>Arbol Binario</p>
     </blockquote>
     <figcaption class="blockquote-footer">
-        Programación III <cite title="Source Title">Estructura de datos</cite>
+        Programación III <cite title="Source Title">Estructuras de datos</cite>
     </figcaption>
 </figure>
 
@@ -56,9 +56,9 @@
             <div class="col-md-12 mt-2">
                 <button class="btn btn-outline-dark" type="button" @onclick="AgregarNodosHijos">Agregar Nodos Hijos</button>
 
-                <button class="btn btn-outline-dark" type="button" @onclick="EliminarNodo">Eliminar Nodo</button>
+                <button class="btn btn-outline-danger" type="button" @onclick="EliminarNodo">Eliminar Nodo</button>
 
-                <button class="btn btn-outline-dark" type="button" @onclick="ToggleMostrarListas">
+                <button class="btn btn-outline-primary" type="button" @onclick="ToggleMostrarListas">
                     @if (mostrarListas)
                     {
                         <span>Ocultar listas</span>
@@ -194,18 +194,21 @@
             ArbolService.NodoRaiz = ArbolService.CrearNodo(infoNodoRaiz);
         }
         ActualizarRecorridos();
+        LimpiarCampos();
     }
 
     private void AgregarNodosHijos()
     {
         ArbolService.AgregarNodo(infoNodoPadre, infoNodoIzquierdo, infoNodoDerecho);
         ActualizarRecorridos();
+        LimpiarCampos();
     }
 
     private void EliminarNodo()
     {
         ArbolService.EliminarNodo(infoNodoEliminar);
         ActualizarRecorridos();
+        LimpiarCampos();
     }
 
     private void ActualizarRecorridos()
@@ -230,6 +233,15 @@
     private void ToggleMostrarListas()
     {
         mostrarListas = !mostrarListas;
+    }
+
+    private void LimpiarCampos()
+    {
+        infoNodoRaiz = "";
+        infoNodoPadre = "";
+        infoNodoIzquierdo = "";
+        infoNodoDerecho = "";
+        infoNodoEliminar = "";
     }
 
     private RenderFragment MostrarNodo(NodoArbol nodo, int x, int y, int offset) => builder =>

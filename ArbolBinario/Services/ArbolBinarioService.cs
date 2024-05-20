@@ -138,9 +138,9 @@ namespace ArbolBinarioBlazor.Services
 
             if (info == nodo.Info)
             {
-
                 if (nodo.SubArbolIzquierdo == null && nodo.SubArbolDerecho == null)
                 {
+
                     return null;
                 }
 
@@ -154,9 +154,13 @@ namespace ArbolBinarioBlazor.Services
                     return nodo.SubArbolIzquierdo;
                 }
 
-                NodoArbol sucesor = ObtenerMinimo(nodo.SubArbolDerecho);
-                nodo.Info = sucesor.Info;
-                nodo.SubArbolDerecho = EliminarNodoRecursivo(nodo.SubArbolDerecho, sucesor.Info);
+                NodoArbol sucesorD = ObtenerMinimo(nodo.SubArbolDerecho);
+                nodo.Info = sucesorD.Info;
+                nodo.SubArbolDerecho = EliminarNodoRecursivo(nodo.SubArbolDerecho, sucesorD.Info);
+
+                NodoArbol sucesorI = ObtenerMinimo(nodo.SubArbolIzquierdo);
+                nodo.Info = sucesorI.Info;
+                nodo.SubArbolIzquierdo = EliminarNodoRecursivo(nodo.SubArbolIzquierdo, sucesorI.Info);
             }
             else if (string.Compare(info, nodo.Info) < 0)
             {
@@ -167,9 +171,21 @@ namespace ArbolBinarioBlazor.Services
                 nodo.SubArbolDerecho = EliminarNodoRecursivo(nodo.SubArbolDerecho, info);
             }
 
+            //if (nodo != null)
+            //{
+            //    if (nodo.SubArbolIzquierdo != null && nodo.SubArbolDerecho != null &&
+            //        nodo.SubArbolIzquierdo.SubArbolDerecho != null)
+            //    {
+            //        // Reorganizamos el árbol
+            //        NodoArbol temp = nodo.SubArbolIzquierdo.SubArbolDerecho;
+            //        nodo.SubArbolIzquierdo.SubArbolDerecho = temp.SubArbolIzquierdo;
+            //        temp.SubArbolIzquierdo = nodo.SubArbolIzquierdo;
+            //        nodo.SubArbolIzquierdo = temp;
+            //    }
+            //}
+
             return nodo;
         }
-
 
         private NodoArbol ObtenerMinimo(NodoArbol nodo)
         {
