@@ -28,12 +28,12 @@
                 <h4>Nodo Raíz</h4>
                 <div class="input-group">
                     <input type="text" class="form-control" @bind="infoNodoRaiz" placeholder="Nodo Raíz" aria-label="Nodo Raíz" aria-describedby="button-addon2">
-                    <button class="btn btn-outline-primary" type="button" id="button-addon2" @onclick="CrearNodoRaiz">Crear Nodo Raíz</button>
+                    <button class="btn btn-outline-dark" type="button" id="button-addon2" @onclick="CrearNodoRaiz">Crear Nodo Raíz</button>
                 </div>
             </div>
         </div>
     }
-    
+
     @if (ArbolService.NodoRaiz != null)
     {
         <div class="row mb-3">
@@ -50,75 +50,122 @@
                 <input type="text" class="form-control" @bind="infoNodoDerecho" placeholder="Nodo Derecho" aria-label="Nodo Derecho">
             </div>
             <div class="col-md-12 mt-2">
-                <button class="btn btn-outline-primary" type="button" @onclick="AgregarNodosHijos">Agregar Nodos Hijos</button>
+                <button class="btn btn-outline-dark" type="button" @onclick="AgregarNodosHijos">Agregar Nodos Hijos</button>
+
+                <button class="btn btn-outline-dark" type="button" @onclick="ToggleMostrarListas">
+                    @if (mostrarListas)
+                    {
+                        <span>Ocultar listas</span>
+                    }
+                    else
+                    {
+                        <span>Mostrar listas</span>
+                    }
+                </button>
             </div>
         </div>
 
+        @if (mostrarListas)
+        {
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Recorridos Recursivos</h4>
+                    <div>
+                        <h5>Recorrido Preorden</h5>
+                        <ul>
+                            @foreach (var nodo in recorridoPreordenRecursivo)
+                            {
+                                <li>@nodo</li>
+                            }
+                        </ul>
+                    </div>
+                    <div>
+                        <h5>Recorrido Inorden</h5>
+                        <ul>
+                            @foreach (var nodo in recorridoInordenRecursivo)
+                            {
+                                <li>@nodo</li>
+                            }
+                        </ul>
+                    </div>
+                    <div>
+                        <h5>Recorrido Postorden</h5>
+                        <ul>
+                            @foreach (var nodo in recorridoPostordenRecursivo)
+                            {
+                                <li>@nodo</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <h4>Recorridos Iterativos</h4>
+                    <div>
+                        <h5>Recorrido Preorden</h5>
+                        <ul>
+                            @foreach (var nodo in recorridoPreordenIterativo)
+                            {
+                                <li>@nodo</li>
+                            }
+                        </ul>
+                    </div>
+                    <div>
+                        <h5>Recorrido Inorden</h5>
+                        <ul>
+                            @foreach (var nodo in recorridoInordenIterativo)
+                            {
+                                <li>@nodo</li>
+                            }
+                        </ul>
+                    </div>
+                    <div>
+                        <h5>Recorrido Postorden</h5>
+                        <ul>
+                            @foreach (var nodo in recorridoPostordenIterativo)
+                            {
+                                <li>@nodo</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
         <div class="row">
-            <div class="col-md-6">
-                <h4>Recorridos Recursivos</h4>
-                <div>
-                    <h5>Recorrido Preorden</h5>
-                    <ul>
-                        @foreach (var nodo in recorridoPreordenRecursivo)
-                        {
-                            <li>@nodo</li>
-                        }
-                    </ul>
-                </div>
-                <div>
-                    <h5>Recorrido Inorden</h5>
-                    <ul>
-                        @foreach (var nodo in recorridoInordenRecursivo)
-                        {
-                            <li>@nodo</li>
-                        }
-                    </ul>
-                </div>
-                <div>
-                    <h5>Recorrido Postorden</h5>
-                    <ul>
-                        @foreach (var nodo in recorridoPostordenRecursivo)
-                        {
-                            <li>@nodo</li>
-                        }
-                    </ul>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <h4>Recorridos Iterativos</h4>
-                <div>
-                    <h5>Recorrido Preorden</h5>
-                    <ul>
-                        @foreach (var nodo in recorridoPreordenIterativo)
-                        {
-                            <li>@nodo</li>
-                        }
-                    </ul>
-                </div>
-                <div>
-                    <h5>Recorrido Inorden</h5>
-                    <ul>
-                        @foreach (var nodo in recorridoInordenIterativo)
-                        {
-                            <li>@nodo</li>
-                        }
-                    </ul>
-                </div>
-                <div>
-                    <h5>Recorrido Postorden</h5>
-                    <ul>
-                        @foreach (var nodo in recorridoPostordenIterativo)
-                        {
-                            <li>@nodo</li>
-                        }
-                    </ul>
-                </div>
+            <div class="col-md-12">
+                <h4>Visualización del Árbol</h4>
+                <svg width="1200" height="800">
+                    @MostrarNodo(ArbolService.NodoRaiz, 600, 40, 300)
+                </svg>
             </div>
         </div>
+        @* <div class="row">
+            <div class="col-md-12">
+                <h4>Visualización del Árbol</h4>
+                <div class="tree-container">
+                    <svg class="tree-svg">
+                        @MostrarNodo(ArbolService.NodoRaiz, 300, 20, 150)
+                    </svg>
+                </div>
+            </div>
+        </div> *@
     }
 </div>
+
+
+@* <style>
+    .tree-container {
+        width: 100vh;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .tree-svg {
+        width: 100%;
+        height: 100%;
+    }
+</style> *@
 
 @code {
     private string? infoNodoRaiz;
@@ -131,6 +178,7 @@
     private List<string> recorridoPreordenIterativo = new();
     private List<string> recorridoInordenIterativo = new();
     private List<string> recorridoPostordenIterativo = new();
+    private bool mostrarListas = false;
 
     private void CrearNodoRaiz()
     {
@@ -165,4 +213,52 @@
             ArbolService.RecorridoPostordenIterativo(ArbolService.NodoRaiz, recorridoPostordenIterativo);
         }
     }
+
+    private void ToggleMostrarListas()
+    {
+        mostrarListas = !mostrarListas;
+    }
+
+    private RenderFragment MostrarNodo(NodoArbol nodo, int x, int y, int offset) => builder =>
+       {
+           builder.OpenElement(0, "circle");
+           builder.AddAttribute(1, "cx", x);
+           builder.AddAttribute(2, "cy", y);
+           builder.AddAttribute(3, "r", 20);
+           builder.AddAttribute(4, "fill", "green");
+           builder.CloseElement();
+
+           builder.OpenElement(5, "text");
+           builder.AddAttribute(6, "x", x);
+           builder.AddAttribute(7, "y", y + 5);
+           builder.AddAttribute(8, "text-anchor", "middle");
+           builder.AddContent(9, nodo.Info);
+           builder.CloseElement();
+
+           if (nodo.SubArbolIzquierdo != null)
+           {
+               builder.OpenElement(10, "line");
+               builder.AddAttribute(11, "x1", x);
+               builder.AddAttribute(12, "y1", y + 20);
+               builder.AddAttribute(13, "x2", x - offset);
+               builder.AddAttribute(14, "y2", y + 70);
+               builder.AddAttribute(15, "stroke", "black");
+               builder.CloseElement();
+
+               builder.AddContent(16, MostrarNodo(nodo.SubArbolIzquierdo, x - offset, y + 80, offset / 2));
+           }
+
+           if (nodo.SubArbolDerecho != null)
+           {
+               builder.OpenElement(17, "line");
+               builder.AddAttribute(18, "x1", x);
+               builder.AddAttribute(19, "y1", y + 20);
+               builder.AddAttribute(20, "x2", x + offset);
+               builder.AddAttribute(21, "y2", y + 70);
+               builder.AddAttribute(22, "stroke", "black");
+               builder.CloseElement();
+
+               builder.AddContent(23, MostrarNodo(nodo.SubArbolDerecho, x + offset, y + 80, offset / 2));
+           }
+       };
 }
